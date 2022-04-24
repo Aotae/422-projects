@@ -1,15 +1,39 @@
 import tkinter
+import MDBClient
 from tkinter import *
 from tkinter import filedialog, messagebox
+
+class Book():
+    """
+    Book class which contains elements:
+    button: a button to select the book from the library screen
+    name: the name of the book
+    text: the contents of the book
+    """
+    def __init__(self,button,name,content):
+        self.button = button
+        self.name = name
+        self.text = content
+
+
+class Notes():
+    """
+    notes class which contains elements:
+    text: the body of the notes
+    suggest: the suggestions that will appear in the notes/ styling of structure
+    """
+    def __init__(self,notes,SQ3R):
+        self.text = notes
+        self.suggest = SQ3R
+
 
 
 class GUI(Tk):
 
-    def __init__(self,):
+    def __init__(self):
         super().__init__()
         self.frames = {}
         self.set_init_window()
-
 
     def set_init_window(self):
         self.title("Bookcase")
@@ -18,68 +42,40 @@ class GUI(Tk):
         global wm_val
         wm_val = '1980x1024+{}+{}'.format((scn_width - 1980) // 2, (scn_height - 1024) // 2)
         self.geometry(wm_val)
+        frame = Frame(self,bg="#f2d7b1")
+        frame.pack(anchor="nw")
         self.protocol('WM_DELETE_WINDOW', self.exit)
-        btn1 = Button(self, text='book1', command=self.__new_window, bg='#d3fbf6', relief=RIDGE)
-        btn1.place(relx=0.1, rely=0.1, width=100, height=150)
+        # for every book in the database display a book button
+        # Get all books from db using MDBClient module probably a func like findall
+        for i in range(0,10):
+            book_button = Button(
+            frame,
+            text = "Book",
+            command= lambda:self.__new_window(frame),
+            height = 10,
+            width = 15,
+            bg = "#79dde8"
+            )
+            book = Book(book_button,"book","this is the book content")
+            book.button.pack(anchor="nw",side=LEFT,padx=5,pady=5)
+        
+       
+
 
     def exit(self):
-        if messagebox.askokcancel('exit?', 'Are you sure to exit?'):
+        if messagebox.askokcancel('exit?', 'Are you sure you want to exit?'):
             self.destroy()
 
-    def __new_window(self):
-        #new window setting
-        global winNew
-        winNew = Toplevel(self)
-        winNew.grid_columnconfigure(0, weight=10)
-        winNew.grid_columnconfigure(1, weight=20)
-        winNew.grid_columnconfigure(2, weight=1)
-        winNew.grid_columnconfigure(3, weight=30)
-        winNew.grid_rowconfigure(0, weight=1)
-        winNew.transient(self)
-        winNew.geometry(wm_val)
-        winNew.title('Notebook')
-        #content setting
-        table = Frame(winNew, height=2, borderwidth=1, relief='groove')
-        table.grid(row=0, column=0, sticky=N+S+W+E)
-        label1 = Label(table, text="Table Of Content", justify=LEFT)
-        label1.pack(side=TOP)
-        #Text setting
-        #booktext = Frame(winNew, height=2, borderwidth=1, relief='groove')
-        #booktext.grid(row=0, column=1, sticky=N+S+W+E)
-        text1 = Text(winNew)
-        text1.insert("insert", "booktext")
-        text1.grid(row=0, column=1, sticky=N+S+W+E)
-        scrob1 = Scrollbar(winNew, orient=tkinter.VERTICAL)
-        text1.config(yscrollcommand=scrob1.set, state="disabled")
-        scrob1.config(command=text1.yview)
-        scrob1.grid(row=0, column=2, sticky=N+S+W+E)
-        #Note setting
-        global survery
-        survery = Frame(winNew, height=2, borderwidth=1, relief='groove')
-        survery.grid(row=0, column=3, sticky=N + S + W + E)
-        surv_title = Label(survery, text="Survey", justify=CENTER, font=('Time New Roman', 20, 'bold'))
-        surv_title.pack()
-        surv_label1 = Label(survery, text="Q1: What do you know about this book?", justify=LEFT)
-        surv_label1.pack()
-        surv_input1 = Entry(survery, bd=2, width=30)
-        surv_input1.pack()
-        surv_label2 = Label(survery, text="Q2: What do you want to know from this book?", justify=LEFT)
-        surv_label2.pack()
-        surv_input2 = Entry(survery, bd=2, width=30)
-        surv_input2.pack()
-        save_button = Button(survery, text="SAVE", command=self.survery_save)
-        save_button.pack()
-        hide_button = Button(survery, text="HIDE", command=survery.grid_remove)
-        hide_button.pack()
-        self.recover_survery_button = Button(winNew, text="SHOW", command=survery.grid)
-        self.recover_survery_button.grid(row=0, column=3)
+    def __new_window(self,frame):
+        for widgets in frame.winfo_children():
+            widgets.destroy()
+        frame.destroy()
+        self.switch_to_note()
 
-
-    def survery_save(self):
-        survery.destroy()
-        self.recover_survery_button.destroy()
+    def survey_save(self):
+        survey.destroy()
+        self.recover_survey_button.destroy()
         self.switch_to_question()
-
     #don't use
     def hide(self, frame):
         frame.grid_remove()
@@ -113,42 +109,55 @@ class GUI(Tk):
         question.destroy()
         self.recover_question_button.destroy()
         self.switch_to_note()
-
     #need to fix and use in question_save
     def get_entry(self):
         with open('output.txt', 'w') as out:
             for entry in self.entryWidgets:
                 out.write(entry.get() + '\n')
-
     def switch_to_note(self):
         #note frame setting
-        global note
-        note = Frame(winNew, height=2, borderwidth=1, relief='groove')
-        note.grid(row=0, column=3, sticky=N + S + W + E)
-        Label(note, text="Note").pack(side=TOP)
+        self.title("Notebook")
+        self.grid_columnconfigure(0,weight=10)
+        self.grid_columnconfigure(1,weight=20)
+        self.grid_columnconfigure(2,weight=1)
+        self.grid_columnconfigure(3,weight=30)
+        table = Frame(self, height=2, borderwidth=1, relief='groove')
+        table.pack()
+        labeltb = Label(table, text="Table Of Content", justify=LEFT)
+        labeltb.pack(side=TOP)
+        # book content
+        #bookcontent = Text(self)
+        #text1.insert("insert", "booktext")
+        #text1.grid(row=0, column=1, sticky=N+S+W+E)
+        #scrob1 = Scrollbar(winNew, orient=tkinter.VERTICAL)
+        #text1.config(yscrollcommand=scrob1.set, state="disabled")
+        #scrob1.config(command=text1.yview)
+        #scrob1.grid(row=0, column=2, sticky=N+S+W+E)
+        #Label(note, text="Note").pack(side=TOP)
+
         #text setting
-        user_note = Text(note, width=100, height=50)
-        user_note.pack(side=LEFT)
-        note_bar = Scrollbar(note, orient=tkinter.VERTICAL)
+        user_note = Text(table, width=50, height=100)
+        user_note.pack(side=RIGHT)
+        note_bar = Scrollbar(table, orient=tkinter.VERTICAL)
         user_note.config(yscrollcommand=note_bar.set)
         note_bar.config(command=user_note.yview)
         note_bar.pack(side=LEFT, fill=Y, pady=170)
         #build save and hide button
-        save_button = Button(note, text="SAVE", command=self.note_save)
-        save_button.pack(side=BOTTOM)
-        hide_button = Button(note, text="HIDE", command=note.grid_remove)
-        hide_button.pack(side=BOTTOM)
-        finish_button = Button(note, text="FINISH", command=self.note_finish)
-        finish_button.pack(side=BOTTOM)
-        self.recover_note_button = Button(winNew, text="SHOW", command=note.grid)
-        self.recover_note_button.grid(row=0, column=3)
+        save_button = Button(table, text="SAVE", command=lambda:self.note_save(user_note))
+        save_button.pack(side=RIGHT)
+        hide_button = Button(table, text="HIDE", command=table.grid_remove)
+        hide_button.pack(side=RIGHT)
+        finish_button = Button(table, text="FINISH", command=lambda:self.note_finish("book_name"))
+        finish_button.pack(side=RIGHT)
+        #self.recover_note_button = Button(winNew, text="SHOW", command=note.grid)
+        #self.recover_note_button.grid(row=0, column=3)
 
-    def note_save(self):
-        pass
+    def note_save(self,notes):
+        note = {"book":"book_name","notes":notes.get('1.0','end')}
+        MDBClient.insert_notes(note)
 
-    def note_finish(self):
-        winNew.destroy()
-        self.switch_to_review()
+    def note_finish(self,id):
+        print(MDBClient.get_notes({"book":id}))
 
     def switch_to_review(self):
         global review
@@ -159,5 +168,4 @@ class GUI(Tk):
 
 if __name__ == "__main__":
     SQ3R = GUI()
-
     SQ3R.mainloop()
