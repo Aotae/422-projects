@@ -56,8 +56,8 @@ class GUI(Tk):
         wm_val = '1980x1024+{}+{}'.format((scn_width - 1980) // 2, (scn_height - 1024) // 2)
         self.geometry(wm_val)
         frame = Frame(self,bg="#f2d7b1")
+        self.protocol('WM_DELETE_WINDOW', lambda:self.exit(False,False,innotes=False))
         frame.pack(anchor="nw")
-        self.protocol('WM_DELETE_WINDOW', self.exit)
         # for every book in the database display a book button
         # Get all books from db using MDBClient module probably a func like findall
         library = MDBClient.get_library()
@@ -66,7 +66,6 @@ class GUI(Tk):
             book_content = title["content"]
             book_author = title["author"]
             book = Book(book_name,book_author,book_content)
-
             book_button = Button(
             frame,
             text = book.name,
@@ -78,8 +77,10 @@ class GUI(Tk):
 
             book_button.pack(anchor="nw",side=LEFT,padx=5,pady=5)
         
-    def exit(self):
+    def exit(self,notes,book,innotes):
         if messagebox.askokcancel('exit?', 'Are you sure you want to exit?'):
+            if(innotes):
+                self.note_save(notes,book)
             self.destroy()
 
     def __new_window(self,frame,book):
@@ -92,13 +93,14 @@ class GUI(Tk):
     def switch_to_note(self,book):
         #Sets up the note taking window on the right hand side
         self.title("Notebook")
+
         frame = PanedWindow(self,bg="#6699CC",handlesize=16,handlepad=16)
         content_frame = Frame(frame,width=100,height=100,padx=10,bg='#424549',)
         note_frame = Frame(frame,width=100,height=100,padx=10,bg='#424549')
         frame.pack()
         frame.configure(sashrelief = RAISED)
         content_frame.pack(side=LEFT, anchor='ne',expand=True)
-        note_frame.pack(side= RIGHT,anchor='nw',expand=True)
+        note_frame.pack(side=RIGHT,anchor='nw',expand=True)
         frame.add(content_frame)
         frame.add(note_frame)
         note_book_scrl = Scrollbar(note_frame)
@@ -110,7 +112,7 @@ class GUI(Tk):
                                padx=10,
                                pady=10,
                                bd=5),True)
-        note_book.text.pack()
+        note_book.text.pack(side=LEFT,padx=5,pady=5,anchor='nw')
         note_book_scrl.config(command=note_book.text.yview)
         note_book.insert_SQ3R()
         #Sets up the book/content window
@@ -121,10 +123,11 @@ class GUI(Tk):
                        height=100,
                        bg= '#EAFFD5',
                        yscrollcommand=content_scrl.set,
-                       padx=100,
+                       padx=10,
                        pady=10,
                        bd=5)
-        content.pack()
+
+        content.pack(side=RIGHT,padx=5,pady=5,anchor='nw')
         content_scrl.config(command=content.yview)
         book.insert_content(content)
         content.config(state=DISABLED)
@@ -133,18 +136,43 @@ class GUI(Tk):
         buttonframe.pack(anchor='nw')
         save = Button(buttonframe,
             text = 'save',
-            command= lambda:note_save(note_book.text,book.name),
-            height = 10,
-            width = 15,
+            command= lambda:self.note_save(note_book.text,book.name),
+            height = 5,
+            width = 5,
             bg = "#7289da")
-        save.pack()
+        save.pack(side=LEFT,anchor='ne',expand=True)
+        finish = Button(buttonframe,
+            text = 'finish',
+            command= lambda:self.note_finish(note_book.text,book.name,frame),
+            height = 5,
+            width = 5,
+            bg = "#7289da")
+        finish.pack(side=LEFT,anchor='ne',expand=True)
+        delete = Button(buttonframe,
+            text = 'delete',
+            command= lambda:self.note_finish(note_book.text,book.name,frame),
+            height = 5,
+            width = 5,
+            bg = "#7289da")
+        finish.pack(side=LEFT,anchor='ne',expand=True)
+
+        self.protocol('WM_DELETE_WINDOW', lambda:self.exit(note_book.text,book.name,innotes=True))
 
 
     def note_save(self,notes,book_name):
+        #saves your notes
         note = {"book":book_name,"notes":notes.get('1.0','end')}
         MDBClient.insert_notes(note)
-    def note_finish(self,id):
-        print(MDBClient.get_notes({"book":id}))
+    def note_finish(self,notes,book_name,frame):
+        #bring back to library screen after saving
+        self.note_save(notes,book_name)
+        print(MDBClient.get_notes({"book":book_name}))
+        for widgets in frame.winfo_children():
+            widgets.destroy()
+        frame.destroy()
+        self.set_init_window()
+    def note_delete():
+        pass
 
 
 if __name__ == "__main__":
