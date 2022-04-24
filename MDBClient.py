@@ -18,6 +18,7 @@ def insert_notes(notes):
 def insert_books(book):
     # inserts one document into the 'library' collection
     # a document includes information on a book such as title and author as well as a cover image
+    # a document is a dictionary is this form {name:book_name,content:book_content,author:book_author}
     client = connect()
     db = client["ARA_books"]
     collection = db["library"]
@@ -26,8 +27,14 @@ def update(id):
     # Put request that will update a users notes on a specified book by id
     pass
 
-def delete(id):
+def delete_notes(id):
     # delete request that will delete a users notes on a specified book by id
+    pass
+
+def delete_library():
+    pass
+
+def delete_books(id):
     pass
 
 def get_notes(id):
@@ -39,7 +46,14 @@ def get_notes(id):
 def get_books(id):
      # gets a book from the 'library' collection according to bookname(id)
     pass
-def getlibrary():
-     # returns all of the resources in the 'library' collection
-    pass
+def get_library():
+     # returns all of the documents in the 'library' collection
+    collection_array = []
+    client = connect()
+    db = client["ARA_books"]
+    collection = db["library"]
+    cursor = collection.find({})
+    for document in cursor:
+        collection_array.append(document)
+    return collection_array
 
