@@ -32,7 +32,11 @@ def delete_notes(id):
     pass
 
 def delete_library():
-    pass
+    client = connect()
+    db = client["ARA_books"]
+    collection = db["library"]
+    collection.drop()
+
 
 def delete_books(id):
     pass
