@@ -16,7 +16,7 @@ def insert_books(book):
     client = pymongo.MongoClient("mongodb://localhost:27017")
     db = client["ARA_books"]
     collection = db["library"]
-    collection.insert_one(notes)
+    collection.insert_one(book)
 def update(id):
     pass
 
