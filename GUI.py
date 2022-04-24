@@ -1,7 +1,7 @@
 import tkinter
 import MDBClient
 from tkinter import *
-from tkinter import filedialog, messagebox
+from tkinter import filedialog, messagebox, ttk
 
 class Book():
     """
@@ -14,6 +14,9 @@ class Book():
         self.name = name
         self.text = content
         self.author = author
+    def insert_content(self,text):
+        text.insert(INSERT,self.text)
+        return
 
 
 class Notes():
@@ -37,10 +40,6 @@ class Notes():
         #clears the text box
             if(self.suggest):
                 self.text.delete(0,end)
-
-
-
-
 
 class GUI(Tk):
 
@@ -66,7 +65,7 @@ class GUI(Tk):
             book_name = title["name"]
             book_content = title["content"]
             book_author = title["author"]
-            book = Book(book_name,book_content,book_author)
+            book = Book(book_name,book_author,book_content)
 
             book_button = Button(
             frame,
@@ -79,9 +78,6 @@ class GUI(Tk):
 
             book_button.pack(anchor="nw",side=LEFT,padx=5,pady=5)
         
-       
-
-
     def exit(self):
         if messagebox.askokcancel('exit?', 'Are you sure you want to exit?'):
             self.destroy()
@@ -96,37 +92,53 @@ class GUI(Tk):
     def switch_to_note(self,book):
         #Sets up the note taking window on the right hand side
         self.title("Notebook")
-        frame = Frame(self,bg="#F8F0E3")
-        book_frame = Frame(self,bg="#F8F0E3")
-        frame.pack(anchor='ne')
-        book_frame.pack(anchor='nw')
-
-        note_book_scrl = Scrollbar(frame)
+        frame = PanedWindow(self,bg="#6699CC",handlesize=16,handlepad=16)
+        content_frame = Frame(frame,width=100,height=100,padx=10,bg='#424549',)
+        note_frame = Frame(frame,width=100,height=100,padx=10,bg='#424549')
+        frame.pack()
+        frame.configure(sashrelief = RAISED)
+        content_frame.pack(side=LEFT, anchor='ne',expand=True)
+        note_frame.pack(side= RIGHT,anchor='nw',expand=True)
+        frame.add(content_frame)
+        frame.add(note_frame)
+        note_book_scrl = Scrollbar(note_frame)
         note_book_scrl.pack(side=RIGHT,fill=Y)
-        note_book = Notes(Text(frame,width=100,
+        note_book = Notes(Text(note_frame,width=100,
                                height=100,
                                bg='#bec2cc',
                                yscrollcommand=note_book_scrl.set,
                                padx=10,
                                pady=10,
                                bd=5),True)
-        note_book.text.pack(anchor='ne',fill=BOTH)
+        note_book.text.pack()
         note_book_scrl.config(command=note_book.text.yview)
         note_book.insert_SQ3R()
         #Sets up the book/content window
-        content_scrl = Scrollbar(book_frame)
+        content_scrl = Scrollbar(content_frame)
         content_scrl.pack(side=RIGHT,fill=Y)
-        content = Text(book_frame,
+        content = Text(content_frame,
                        width=100,
                        height=100,
-                       bg= '#F8F0E3',
+                       bg= '#EAFFD5',
                        yscrollcommand=content_scrl.set,
-                       padx=10,
+                       padx=100,
                        pady=10,
                        bd=5)
-        content.insert(INSERT,book.text)
-        content.pack(anchor='nw',fill=BOTH)
+        content.pack()
         content_scrl.config(command=content.yview)
+        book.insert_content(content)
+        content.config(state=DISABLED)
+        #Sets up button UI for saving and exiting
+        buttonframe = Frame(note_frame,width=20,height=20,bg='#7289da')
+        buttonframe.pack(anchor='nw')
+        save = Button(buttonframe,
+            text = 'save',
+            command= lambda:note_save(note_book.text,book.name),
+            height = 10,
+            width = 15,
+            bg = "#7289da")
+        save.pack()
+
 
     def note_save(self,notes,book_name):
         note = {"book":book_name,"notes":notes.get('1.0','end')}
@@ -137,9 +149,10 @@ class GUI(Tk):
 
 if __name__ == "__main__":
 
-    MDBClient.insert_books({"name":"DUNE","content":"This is the book Dune,\n We don't have the license to it so filler text\n","author":"Frank Herbert"})
-    MDBClient.insert_books({"name":"DUNE1","content":"This is the book Dune,\n We don't have the license to it so filler text\n","author":"Frank Herbert"})
-    MDBClient.insert_books({"name":"DUNE2","content":"This is the book Dune,\n We don't have the license to it so filler text\n","author":"Frank Herbert"})
-    MDBClient.insert_books({"name":"DUNE3","content":"This is the book Dune,\n We don't have the license to it so filler text\n","author":"Frank Herbert"})
+    MDBClient.insert_books({"name":"DUNE","content":"This is the book Dune,\nWe don't have the license to it\nso have some filler text\n","author":"Frank Herbert"})
+    MDBClient.insert_books({"name":"DUNE1","content":"This is the book Dune,\nWe don't have the license to it\nso have some filler text\n","author":"Frank Herbert"})
+    MDBClient.insert_books({"name":"DUNE2","content":"This is the book Dune,\nWe don't have the license to it\nso have some filler text\n","author":"Frank Herbert"})
+    MDBClient.insert_books({"name":"DUNE3","content":"This is the book Dune,\nWe don't have the license to it\nso have some filler text\n","author":"Frank Herbert"})
     SQ3R = GUI()
     SQ3R.mainloop()
+    MDBClient.delete_library()
