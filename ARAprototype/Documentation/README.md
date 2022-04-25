@@ -5,5 +5,6 @@ Our Software can be decomposed into 3 major components the GUI, The B/N(BOOK/NOT
   
 # Major Components  
 ## GUI
+The Graphical User Interface (GUI) is the client where A User can select a book from a library maintained by an Administrator. Once a book is Selected The User will be met with a note-taking screen made up of three windows. The first window (Content Window) contains the content of the book in a scrollable text object. The second window (UI Window) contains UI for saving a User's Notes, Deleting a User's Notes, Finish note-taking and go back to library, Toggle SQ3R Guidance, and Hide Notes. The third window (Note Window) is combined with the second window and contains as Scrollable text object which the user can edit and a line counter on the side. The Note window is resizable as is the content window.  
 ## B/N SERVER
 ## B/N DATABASE
