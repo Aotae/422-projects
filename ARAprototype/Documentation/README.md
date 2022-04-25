@@ -14,6 +14,6 @@ The B/N DATABASE is where both Books and Notes are stored. Notes are stored in a
 
 # Minor Components
 
-## Notes Collection
+## Note Collection && Book Collection
+The note collection functioned as our 'note-library' and was the actual object which held our 'note' documents while the B/N Database holds collections. We believe that this distinction should be made in our architecture because in a MongoDB database most functions to insert/delete are functions directly called by a collection object rather than the database. In essence the collection acts as a table in a relational database. We also must make a distinction between that which is stored in this collection, that being 'note' objects, and other collections. This is because if we simply stored both notes and books in the same collection finding/getting documents would be much harder as ids piled up. So we make this distinction between collections and databases along with what collections are responsible for what.
 
-## Books Collection
