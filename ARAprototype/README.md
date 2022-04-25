@@ -18,7 +18,7 @@ the next screen will then have the book's contents and a place for you to take n
 To insert data into the database use run dbpopulate.py in the terminal with a file as an arguement formatted such that  
 line0 = Title  
 line1 = Author  
-usage: ./populate.py text1  
+usage: ./dbpopulate.py text1  
 some sample texts have been provided, Dune.txt is the most well formatted at the moment
 
 ## Contributing
