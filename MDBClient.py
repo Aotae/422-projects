@@ -38,7 +38,11 @@ def get_notes(id):
     return collection.find_one(id)
 def get_books(id):
      # gets a book from the 'library' collection according to bookname(id)
-    pass
+    client = connect()
+    db = client["ARA_books"]
+    collection = db["library"]
+    return collection.find_one(id)
+    
 def getlibrary():
      # returns all of the resources in the 'library' collection
     pass
