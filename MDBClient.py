@@ -17,9 +17,12 @@ def insert_notes(notes):
     db = client["ARA_books"]
     collection = db["note-library"]
     collection.insert_one(notes)
-def update(id):
-    # Put request that will update a users notes on a specified book by id
-    pass
+def update(id,value):
+    client = connect()
+    print("Hey we got here")
+    db = client["ARA_books"]
+    collection = db["note-library"]
+    collection.update_one(id,{"$set":value})
 def delete_notes(id):
     # delete request that will delete a users notes on a specified book by id
     pass
@@ -58,4 +61,18 @@ def get_library():
     for document in cursor:
         collection_array.append(document)
     return collection_array
+def note_exists(id):
+    client = connect()
+    db = client["ARA_books"]
+    collection = db["note-library"]
+    count = collection.count_documents(id)
+    if(count>0):
+        return True
+    else:
+        return False
+def delete_note_library():
+    client = connect()
+    db = client["ARA_books"]
+    collection = db["note-library"]
+    collection.drop()
 
