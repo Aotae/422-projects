@@ -9,6 +9,7 @@ def connect():
         raise Exception('bad connection with db')
     return client
 
+
 def insert_notes(notes):
     # inserts one document into the 'note-library' collection
     # a document includes a User's notes for a specified book
@@ -36,6 +37,7 @@ def insert_books(book):
     # inserts one document into the 'library' collection
     # a document includes information on a book such as title and author as well as a cover image
     # a document is a dictionary is this form {name:book_name,content:book_content,author:book_author}
+
     client = connect()
     db = client["ARA_books"]
     collection = db["library"]
@@ -93,4 +95,3 @@ def delete_note_library():
     db = client["ARA_books"]
     collection = db["note-library"]
     collection.drop()
-
