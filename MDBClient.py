@@ -5,7 +5,10 @@ from pymongo import MongoClient
 #connects to the mongodb database and checks to see if its valid.
 def connect():
     client = pymongo.MongoClient("mongodb://localhost:27017")
+    if not client:
+        raise Exception('bad connection with db')
     return client
+
 def insert_notes(notes):
     # inserts one document into the 'note-library' collection
     # a document includes a User's notes for a specified book
@@ -14,7 +17,13 @@ def insert_notes(notes):
     db = client["ARA_books"]
     collection = db["note-library"]
     collection.insert_one(notes)
-    
+def update(id):
+    # Put request that will update a users notes on a specified book by id
+    pass
+def delete_notes(id):
+    # delete request that will delete a users notes on a specified book by id
+    pass
+
 def insert_books(book):
     # inserts one document into the 'library' collection
     # a document includes information on a book such as title and author as well as a cover image
@@ -23,24 +32,13 @@ def insert_books(book):
     db = client["ARA_books"]
     collection = db["library"]
     collection.insert_one(book)
-def update(id):
-    # Put request that will update a users notes on a specified book by id
+def delete_books(id):
     pass
-
-def delete_notes(id):
-    # delete request that will delete a users notes on a specified book by id
-    pass
-
 def delete_library():
     client = connect()
     db = client["ARA_books"]
     collection = db["library"]
     collection.drop()
-
-
-def delete_books(id):
-    pass
-
 def get_notes(id):
     # gets the notes from the 'note-library' collection according to bookname(id)
     client = connect()
