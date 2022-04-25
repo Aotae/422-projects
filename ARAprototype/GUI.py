@@ -4,6 +4,15 @@ from tkinter import *
 from tkinter import filedialog, messagebox, ttk
 from functools import partial
 
+"""
+A GUI/Client to access Books and take notes on them either in a guided SQ3R format or
+Freestyle, connected to A Book/Note Server which handles requests
+
+Written by:
+Jiangshan Zhang, Nathan Pang
+Reviewed, proofread and editted by:
+Carlos Flores Jayden Ben
+"""
 class Book():
     """
     Book class which contains elements:
@@ -50,12 +59,13 @@ class Notes():
             self.text.insert("2.0","Book Title:")
             self.text.insert("3.0","Chapter Title:")
             self.suggest = True
-
-
+#
+#
 # https://codingshiksha.com/python/python-3-tkinter-adding-line-numbers-to-text-widget-in-gui-desktop-app-full-project-for-beginners/
 # line number class used in this project with minor adjustments
 # essentially waits for keypresses and checks if a character was '\n' and increments the line number
 # modifications: line number scrolls with the scrollbar associated with our notes text object
+# not perfect but will do the job
 class LineNumbers(Text):
     def __init__(self, master, text_widget,note_book_scrl, **kwargs):
         super().__init__(master, **kwargs)
@@ -88,6 +98,12 @@ class GUI(Tk):
         self.set_init_window()
 
     def set_init_window(self):
+        # set_init_window()
+        #       Sets up main main library
+        #       looks at entire library collection
+        #       and assigns them to Book objects
+        #///////////////////////////////////////
+        #
         self.title("Bookcase")
         global scn_width, scn_height
         scn_width, scn_height = self.maxsize()
@@ -121,12 +137,14 @@ class GUI(Tk):
             book_button.pack(anchor="nw",side=LEFT,padx=5,pady=5)
         
     def exit(self,notes,book,innotes,SQ3R):
+        # Modal window asking for confirmation to exit
         if messagebox.askokcancel('exit?', 'Are you sure you want to exit?'):
             if(innotes):
                 self.note_save(notes,book,SQ3R)
             self.destroy()
 
     def __new_window(self,frame,book):
+        # clears library switches to main notes
         for widgets in frame.winfo_children():
             widgets.destroy()
         frame.destroy()
@@ -134,11 +152,15 @@ class GUI(Tk):
         self.switch_to_note(book)
 
     def switch_to_note(self,book):
-        #
-        #Sets up the note taking window on the right hand side
+        # switch_to_note()
+        #       Sets up main content consumption window as well as notes window
+        #       Takes in book to get content
+        #       Generates notes if they exist
+        #///////////////////////////////////////
         #
         self.title("Notebook")
         # get the notes from the database
+        # if they exist store them in note_content else note_content should be Null
         notebook_doc = MDBClient.get_notes({"book":book.name})
         if(notebook_doc != None):
             note_content = notebook_doc["notes"]
@@ -147,6 +169,8 @@ class GUI(Tk):
             print(note_content)
         else:
             note_content= None
+
+        #Sets up paned window such that you can resize the note/book area
         frame = PanedWindow(self,bg="#23272a",handlesize=60,handlepad=60,sashwidth=10)
         content_frame = Frame(frame,width=200,height=100,padx=10,bg='#424549')
         note_frame = Frame(frame,width=170,height=100,padx=10,bg='#424549')
@@ -171,15 +195,18 @@ class GUI(Tk):
                                insertbackground='white',
                                relief=FLAT),False,True)
         note_book.text.pack(side=RIGHT,padx=5,pady=5,anchor='nw')
+        # Sets up line count
         line_number = LineNumbers(note_frame,note_book.text,note_book_scrl,width=1)
         line_number.pack(side=RIGHT,padx=5,pady=5,anchor='nw')
         note_book_scrl.config(command=note_book.text.yview)
+        # if no notes we're found insert areas to type book title and chapter
         if(note_content == None):
             for i in range(1,3):
                 note_book.text.insert(f"{i}.0","\n")
             note_book.text.insert("2.0","Book Title:")
             note_book.text.insert("3.0","Chapter Title:")
         else:
+            # insert the notes
             note_book.text.insert(INSERT,note_content)
             note_book.suggest = not note_book.suggest
         #
@@ -218,6 +245,7 @@ class GUI(Tk):
             fg="#ffffff",
             relief=FLAT)
         save.pack(side=RIGHT,anchor='ne',padx=4,pady=5,ipadx=1,expand=True)
+        #button for saving and going back to library
         finish = Button(buttonframe,
             text = 'finish',
             command= lambda:self.note_finish(note_book.text,book.name,frame,note_book.suggest),
@@ -227,6 +255,7 @@ class GUI(Tk):
             fg="#ffffff",
             relief=FLAT)
         finish.pack(side=RIGHT,anchor='ne',padx=4,pady=5,ipadx=1,expand=True)
+        #button to delete notes 
         delete = Button(buttonframe,
             text = 'delete',
             command= lambda:self.note_delete(book.name,frame),
@@ -236,6 +265,7 @@ class GUI(Tk):
             fg="#ffffff",
             relief=FLAT)
         delete.pack(side=RIGHT,anchor='ne',padx=4,pady=5,ipadx=1,expand=True)
+        #button to hide notes
         hide = Button(buttonframe,
             text = 'hide',
             command= lambda:self.note_hide(note_book.text,note_book),
@@ -245,6 +275,7 @@ class GUI(Tk):
             fg="#ffffff",
             relief=FLAT)
         hide.pack(side=RIGHT,anchor='ne',padx=4,pady=5,ipadx=1,expand=True)
+        #button to insert SQ3R reccomendations
         enableSQ3R = Button(buttonframe,
             text = 'SQ3R',
             command= note_book.insert_SQ3R,
@@ -274,6 +305,7 @@ class GUI(Tk):
         self.set_init_window()
 
     def note_delete(self,book_name,frame):
+        #modal window asking for confirmation to delete
         if messagebox.askokcancel('delete?', 'Are you sure you want to delete your notes?'):
             MDBClient.delete_notes({"book":book_name})
             for widgets in frame.winfo_children():
@@ -282,6 +314,7 @@ class GUI(Tk):
             self.set_init_window()
 
     def note_hide(self,note_text,note_book):
+        # hides the notes
         if(note_book.hidden == False):
             note_text.forget()
             note_book.hidden = True
