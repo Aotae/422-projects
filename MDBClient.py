@@ -17,18 +17,21 @@ def insert_notes(notes):
     db = client["ARA_books"]
     collection = db["note-library"]
     collection.insert_one(notes)
+
 def update(id,value):
     client = connect()
     print("Hey we got here")
     db = client["ARA_books"]
     collection = db["note-library"]
     collection.update_one(id,{"$set":value})
+
 def delete_notes(id):
     # delete request that will delete a users notes on a specified book by id
     client = connect()
     db = client["ARA_books"]
     collection = db["note-library"]
     collection.deleteOne(id)
+
 def insert_books(book):
     # inserts one document into the 'library' collection
     # a document includes information on a book such as title and author as well as a cover image
@@ -37,28 +40,33 @@ def insert_books(book):
     db = client["ARA_books"]
     collection = db["library"]
     collection.insert_one(book)
+
 def delete_books(id):
     client = connect()
     db = client["ARA_books"]
     collection = db["library"]
     collection.deleteOne(id)
+
 def delete_library():
     client = connect()
     db = client["ARA_books"]
     collection = db["library"]
     collection.drop()
+
 def get_notes(id):
     # gets the notes from the 'note-library' collection according to bookname(id)
     client = connect()
     db = client["ARA_books"]
     collection = db["note-library"]
     return collection.find_one(id)
+
 def get_books(id):
      # gets a book from the 'library' collection according to bookname(id)
     client = connect()
     db = client["ARA_books"]
     collection = db["library"]
     return collection.find_one(id)
+
 def get_library():
      # returns all of the documents in the 'library' collection
     collection_array = []
@@ -69,6 +77,7 @@ def get_library():
     for document in cursor:
         collection_array.append(document)
     return collection_array
+
 def note_exists(id):
     client = connect()
     db = client["ARA_books"]
@@ -78,6 +87,7 @@ def note_exists(id):
         return True
     else:
         return False
+
 def delete_note_library():
     client = connect()
     db = client["ARA_books"]
