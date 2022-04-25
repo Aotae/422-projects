@@ -25,9 +25,10 @@ class Notes():
     text: the body of the notes
     suggest: the suggestions that will appear in the notes/ styling of structure
     """
-    def __init__(self,notes,SQ3R=False):
+    def __init__(self,notes,hidden,SQ3R=False):
         self.text = notes
         self.suggest = SQ3R
+        self.hidden = hidden
     def insert_SQ3R(self):
         if(self.suggest):
             for i in range(1,26):
@@ -163,7 +164,7 @@ class GUI(Tk):
                                yscrollcommand=note_book_scrl.set,
                                padx=10,
                                pady=10,
-                               bd=5),True)
+                               bd=5),False,True)
         note_book.text.pack(side=RIGHT,padx=5,pady=5,anchor='nw')
         line_number = LineNumbers(note_frame,note_book.text,note_book_scrl,width=1)
         line_number.pack(side=RIGHT,padx=5,pady=5,anchor='nw')
@@ -217,14 +218,14 @@ class GUI(Tk):
         finish.pack(side=RIGHT,anchor='ne',expand=True)
         delete = Button(buttonframe,
             text = 'delete',
-            command= lambda:self.note_delete(book.name),
+            command= lambda:self.note_delete(book.name,frame),
             height = 5,
             width = 5,
             bg = "#7289da")
         delete.pack(side=RIGHT,anchor='ne',expand=True)
         hide = Button(buttonframe,
             text = 'hide',
-            command= lambda:self.note_finish(note_book.text,book.name,frame),
+            command= lambda:self.note_hide(note_book.text,note_book),
             height = 5,
             width = 5,
             bg = "#7289da")
@@ -245,6 +246,7 @@ class GUI(Tk):
             MDBClient.update({"book":book_name},note)
         else:
             MDBClient.insert_notes(note)
+
     def note_finish(self,notes,book_name,frame,SQ3R):
         #bring back to library screen after saving
         self.note_save(notes,book_name,SQ3R)
@@ -253,10 +255,25 @@ class GUI(Tk):
             widgets.destroy()
         frame.destroy()
         self.set_init_window()
-    def note_delete(book_name):
-        MDBClient.delete_notes(book_name)
-    def note_hide():
-        pass
+
+    def note_delete(self,book_name,frame):
+        if messagebox.askokcancel('delete?', 'Are you sure you want to delete your notes?'):
+            MDBClient.delete_notes({"book":book_name})
+            for widgets in frame.winfo_children():
+                widgets.destroy()
+                frame.destroy()
+            self.set_init_window()
+
+    def note_hide(self,note_text,note_book):
+        if(note_book.hidden == False):
+            note_text.forget()
+            note_book.hidden = True
+        else:
+            note_text.pack(side=RIGHT,padx=5,pady=5,anchor='nw')
+            note_book.hidden = False
+
+
+
 
 
 if __name__ == "__main__":
