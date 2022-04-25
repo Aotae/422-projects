@@ -25,8 +25,10 @@ def update(id,value):
     collection.update_one(id,{"$set":value})
 def delete_notes(id):
     # delete request that will delete a users notes on a specified book by id
-    pass
-
+    client = connect()
+    db = client["ARA_books"]
+    collection = db["note-library"]
+    collection.deleteOne(id)
 def insert_books(book):
     # inserts one document into the 'library' collection
     # a document includes information on a book such as title and author as well as a cover image
@@ -36,7 +38,10 @@ def insert_books(book):
     collection = db["library"]
     collection.insert_one(book)
 def delete_books(id):
-    pass
+    client = connect()
+    db = client["ARA_books"]
+    collection = db["library"]
+    collection.deleteOne(id)
 def delete_library():
     client = connect()
     db = client["ARA_books"]
@@ -50,7 +55,10 @@ def get_notes(id):
     return collection.find_one(id)
 def get_books(id):
      # gets a book from the 'library' collection according to bookname(id)
-    pass
+    client = connect()
+    db = client["ARA_books"]
+    collection = db["library"]
+    return collection.find_one(id)
 def get_library():
      # returns all of the documents in the 'library' collection
     collection_array = []
