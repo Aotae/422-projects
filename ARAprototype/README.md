@@ -15,10 +15,10 @@ Depending on how populated the library is you will see an amount of books that y
 the next screen will then have the book's contents and a place for you to take notes with reminders of SQ3R
 
 ## Admin(Easy Insertion of Data)
-To insert data into the database use run dbpopulate.py in the terminal with a file as an arguement formatted such that\n
-line0 = Title\n
-line1 = Author\n
-usage: ./dbpopulate.py text1\n
+To insert data into the database use run dbpopulate.py in the terminal with a file as an arguement formatted such that
+line0 = Title  
+line1 = Author  
+usage: ./dbpopulate.py text1  
 some sample texts have been provided, Dune.txt is the most well formatted at the moment
 
 ## Contributing
