@@ -1,5 +1,4 @@
 import pymongo
-import GUI
 from pymongo import MongoClient
 
 #connects to the mongodb database and checks to see if its valid.
