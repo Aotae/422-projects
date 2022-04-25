@@ -19,6 +19,7 @@ To insert data into the database use run dbpopulate.py in the terminal with a fi
 line0 = Title
 line1 = Author
 usage: ./dbpopulate.py text1
+some sample texts have been provided, Dune.txt is the most well formatted at the moment
 
 ## Contributing
 Pull requests are subject to scrutiny
