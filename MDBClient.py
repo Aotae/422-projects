@@ -22,7 +22,10 @@ def update(id):
     pass
 def delete_notes(id):
     # delete request that will delete a users notes on a specified book by id
-    pass
+    client = connect()
+    db = client["ARA_books"]
+    collection = db["note-library"]
+    collection.deleteOne(id)
 def insert_books(book):
     # inserts one document into the 'library' collection
     # a document includes information on a book such as title and author as well as a cover image
