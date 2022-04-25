@@ -94,7 +94,8 @@ class GUI(Tk):
         global wm_val
         wm_val = '1980x1024+{}+{}'.format((scn_width - 1980) // 2, (scn_height - 1024) // 2)
         self.geometry(wm_val)
-        frame = Frame(self,bg="#f2d7b1")
+        self.configure(bg='#23272a')
+        frame = Frame(self,bg="#2c2f33")
         self.protocol('WM_DELETE_WINDOW', lambda:self.exit(False,False,innotes=False,SQ3R=False))
         frame.pack(anchor="nw")
         # for every book in the database display a book button
@@ -111,8 +112,8 @@ class GUI(Tk):
             text = book.name,
             command= partial(self.__new_window,frame,book),
             height = 10,
-            width = 15,
-            bg = "#79dde8"
+            width = 17,
+            bg = "#99aab5"
             )
             #print(book.name)
 
@@ -145,9 +146,9 @@ class GUI(Tk):
             print(note_content)
         else:
             note_content= None
-        frame = PanedWindow(self,bg="#6699CC",handlesize=16,handlepad=16)
+        frame = PanedWindow(self,bg="#23272a",handlesize=16,handlepad=16)
         content_frame = Frame(frame,width=100,height=100,padx=10,bg='#424549',)
-        note_frame = Frame(frame,width=165,height=100,padx=10,bg='#424549')
+        note_frame = Frame(frame,width=170,height=100,padx=10,bg='#424549')
         frame.pack()
         frame.configure(sashrelief = RAISED)
         content_frame.pack(side=LEFT, anchor='ne',expand=True)
@@ -160,11 +161,14 @@ class GUI(Tk):
         note_book = Notes(Text(note_frame,
                                width=90,
                                height=100,
-                               bg='#bec2cc',
+                               bg='#2c2f33',
+                               fg='#ffffff',
                                yscrollcommand=note_book_scrl.set,
                                padx=10,
                                pady=10,
-                               bd=5),False,True)
+                               bd=5,
+                               insertbackground='white',
+                               relief=FLAT),False,True)
         note_book.text.pack(side=RIGHT,padx=5,pady=5,anchor='nw')
         line_number = LineNumbers(note_frame,note_book.text,note_book_scrl,width=1)
         line_number.pack(side=RIGHT,padx=5,pady=5,anchor='nw')
@@ -183,15 +187,17 @@ class GUI(Tk):
         content_scrl = Scrollbar(content_frame)
         content_scrl.pack(side=RIGHT,fill=Y)
         content = Text(content_frame,
-                       width=100,
+                       width=80,
                        height=100,
-                       bg= '#EAFFD5',
+                       bg= '#2c2f33',
+                       fg='#ffffff',
                        yscrollcommand=content_scrl.set,
                        padx=10,
                        pady=10,
-                       bd=5)
+                       bd=5,
+                       relief=FLAT)
 
-        content.pack(side=RIGHT,padx=5,pady=5,anchor='nw')
+        content.pack(side=LEFT,padx=5,pady=5,anchor='nw')
         content_scrl.config(command=content.yview)
 
         book.insert_content(content)
@@ -200,43 +206,53 @@ class GUI(Tk):
         #
         #Sets up button UI for saving and exiting
         #
-        buttonframe = Frame(note_frame,width=20,height=20,bg='#7289da')
+        buttonframe = Frame(note_frame,width=20,height=20,bg='#424549')
         buttonframe.pack(anchor='ne',side=RIGHT)
         save = Button(buttonframe,
             text = 'save',
             command= lambda:self.note_save(note_book.text,book.name,note_book.suggest),
             height = 5,
             width = 5,
-            bg = "#7289da")
-        save.pack(side=RIGHT,anchor='ne',expand=True)
+            bg = "#7289da",
+            fg="#ffffff",
+            relief=FLAT)
+        save.pack(side=RIGHT,anchor='ne',padx=5,pady=5,expand=True)
         finish = Button(buttonframe,
             text = 'finish',
             command= lambda:self.note_finish(note_book.text,book.name,frame,note_book.suggest),
             height = 5,
             width = 5,
-            bg = "#7289da")
-        finish.pack(side=RIGHT,anchor='ne',expand=True)
+            bg = "#7289da",
+            fg="#ffffff",
+            relief=FLAT)
+        finish.pack(side=RIGHT,anchor='ne',padx=5,pady=5,expand=True)
         delete = Button(buttonframe,
             text = 'delete',
             command= lambda:self.note_delete(book.name,frame),
             height = 5,
             width = 5,
-            bg = "#7289da")
-        delete.pack(side=RIGHT,anchor='ne',expand=True)
+            bg = "#7289da",
+            fg="#ffffff",
+            relief=FLAT)
+        delete.pack(side=RIGHT,anchor='ne',padx=5,pady=5,expand=True)
         hide = Button(buttonframe,
             text = 'hide',
             command= lambda:self.note_hide(note_book.text,note_book),
             height = 5,
             width = 5,
-            bg = "#7289da")
-        hide.pack(side=RIGHT,anchor='ne',expand=True)
+            bg = "#7289da",
+            fg="#ffffff",
+            relief=FLAT)
+        hide.pack(side=RIGHT,anchor='ne',padx=5,pady=5,expand=True)
         enableSQ3R = Button(buttonframe,
             text = 'SQ3R',
             command= note_book.insert_SQ3R,
             height = 5,
             width = 5,
-            bg = "#7289da")
-        enableSQ3R.pack(side=RIGHT,anchor='ne',expand=True)
+            bg = "#7289da",
+            fg="#ffffff",
+            relief=FLAT)
+        enableSQ3R.pack(side=RIGHT,anchor='ne',padx=5,pady=5,expand=True)
         self.protocol('WM_DELETE_WINDOW', lambda:self.exit(note_book.text,book.name,innotes=True, SQ3R=note_book.suggest))
 
     def note_save(self,notes,book_name,SQ3R):

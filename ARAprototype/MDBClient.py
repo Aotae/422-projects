@@ -13,14 +13,12 @@ def insert_notes(notes):
     # inserts one document into the 'note-library' collection
     # a document includes a User's notes for a specified book
     client = connect()
-    print("Hey we got here")
     db = client["ARA_books"]
     collection = db["note-library"]
     collection.insert_one(notes)
 
 def update(id,value):
     client = connect()
-    print("Hey we got here")
     db = client["ARA_books"]
     collection = db["note-library"]
     collection.update_one(id,{"$set":value})
