@@ -1,10 +1,19 @@
 # End User Guide
 Welcome to the ARA User Guide.
 # Admin Set Up
-For general Set Up please refer to the ARA README.md, this document is for function definitions and documentation.
+For general Set Up please refer to the ARA README.md, this document is for function definitions and documentation and student functionalities.
+# Student Usage
+Students should select a book from a library curated by their local administrator. They can do this by clicking the book that they wish to select.  
+Once students have made their selection they may begin to take notes while perusing the contents of the book which they selected.  
+A Student can save their notes at any time and can also hide notes to quiz themselves. They can accomplish this by pressing the 'save' and 'hide/show' button respectively.  
+A Student also has the ability to toggle SQ3R note-taking guidance. They can accomplish this by pressing the 'SQ3R' button  
+A Student can also delete their notes for a specified book by pressing the 'delete' button  
+Finally when a student is done taking notes they can either press the finish button saving their work and bringing them back to the library or they can exit the program which also saves their work.  
+
+Students should note that they can resize the book window as well as the notes window.
 # MDBClient funcs  
 Insert_Notes:POST
-->(notes) ->void
+->(notes) ->void  
 takes in the notes that need to be inserted into the Note Collection  
 
 Insert_Books:POST  
@@ -49,3 +58,4 @@ Used by Update_Notes
 
 Delete_note-library:DELETE  
 #DO NOT USE ONLY USED IN TESTING  
+# GUI funcs
