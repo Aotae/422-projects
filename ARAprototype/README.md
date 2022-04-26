@@ -1,14 +1,18 @@
 # ARA (Active Reading Assistant)
 
 ARA is a program which helps a reader take active notes using SQ3R (Survey, Question, Read, Recite, Review)
-This is not a production level product and therefore URIs used to connect are all local rather than real URIs
+This is not a production level product and therefore URIs used to connect are all local rather than real URIs.  
+It would be trivial to get the Server running using Mongo Atlas to run as a cloud service but the SRS for the project asked us to  
+not use cloud services.
 
 ## Installation
 ## MongoDB Server
 Make sure you install mongodb as a service to run locally as we don't have the option to host our db server on MongoAtlas as stated by this projects SRS
 The link to install is below choose the On-Premise option
 https://www.mongodb.com/try/download/community
-make sure to install it as a service
+make sure to install it as a service then follow this guide to see if the server is running.  
+follow this guide for your respective operating system  
+https://www.mongodb.com/docs/manual/administration/install-community/
 ## ARA client
 Either run the GUI.py module or the ARA.exe to open the client
 Depending on how populated the library is you will see an amount of books that you can access by clicking
