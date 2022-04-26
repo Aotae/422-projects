@@ -28,3 +28,6 @@ some sample texts have been provided, Dune.txt is the most well formatted at the
 ## Contributing
 Pull requests are subject to scrutiny
 
+## 422
+Please check the GitHub link for the full markdown experience
+https://github.com/Aotae/422-projects
