@@ -11,7 +11,8 @@ Make sure you install mongodb as a service to run locally as we don't have the o
 The link to install is below choose the On-Premise option
 https://www.mongodb.com/try/download/community
 make sure to install it as a service then follow this guide to see if the server is running.  
-https://www.mongodb.com/docs/guides/server/install/
+follow this guide for your respective operating system  
+https://www.mongodb.com/docs/manual/administration/install-community/
 ## ARA client
 Either run the GUI.py module or the ARA.exe to open the client
 Depending on how populated the library is you will see an amount of books that you can access by clicking
