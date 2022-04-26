@@ -1,7 +1,9 @@
 # ARA (Active Reading Assistant)
 
 ARA is a program which helps a reader take active notes using SQ3R (Survey, Question, Read, Recite, Review)
-This is not a production level product and therefore URIs used to connect are all local rather than real URIs
+This is not a production level product and therefore URIs used to connect are all local rather than real URIs.  
+It would be trivial to get the Server running using Mongo Atlas to run as a cloud service but the SRS for the project asked us to  
+not use cloud services.
 
 ## Installation
 ## MongoDB Server
