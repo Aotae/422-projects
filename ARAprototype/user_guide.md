@@ -59,3 +59,32 @@ Used by Update_Notes
 Delete_note-library:DELETE  
 #DO NOT USE ONLY USED IN TESTING  
 # GUI funcs
+Buttons == Functions + User Input
+Buttons:
+   Finish -> Save to DB-> go to Book Selection  
+   Save -> Save to DB  
+   Delete -> Delete from DB after warning  
+   Hide -> Hides Notes Window  
+   SQ3R -> Toggles SQ3R text  
+   Notes (Window) == UI/User Input  
+  
+Notes (Window):  
+   Resizeable Scrollable Text  
+   Scrollable line numbers  
+   Content(Window) == Read Only, Book Text  
+
+Content (Window):  
+   Resizeable Scrollable Text -> Content of Book  
+   Book(Object) == Organised Content/Data  
+  
+Book:  
+   Content == Text  
+   Author == Text  
+   Title == Text  
+
+Notes(Note Object) == Organised User Generated Content/Data  
+  
+Notes (Note Object):  
+   Content == Text  
+   Book Title == Text  
+   SQ3R =True/False  
