@@ -1,10 +1,12 @@
 # ARA (Active Reading Assistant)
 
 ARA is a program which helps a reader take active notes using SQ3R (Survey, Question, Read, Recite, Review)
-This is not a production level product and therefore URIs used to connect are all local rather than real URIs.  
+This is not a production level product and therefore the mongodb server is bound to the local feedback loop 127.0.0.1  and uses localhost rather than real URIs.  
 It would be trivial to get the Server running using Mongo Atlas to run as a cloud service but the SRS for the project asked us to  
 not use cloud services.
-
+If you wish to be able to run the MDB server remotely follow this guide to set up remote access to mongodb  
+https://www.digitalocean.com/community/tutorials/how-to-configure-remote-access-for-mongodb-on-ubuntu-20-04  
+then remember to change the URI in MDBClient.py to the machine which is hosting the MDBServer and database's publicly routable ip.  
 ## Installation
 ## MongoDB Server
 Make sure you install mongodb as a service to run locally as we don't have the option to host our db server on MongoAtlas as stated by this projects SRS
